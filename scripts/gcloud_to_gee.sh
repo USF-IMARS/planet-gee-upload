@@ -14,7 +14,7 @@
 
 # Example usages:
 #     Example 1: Run for St Andrews 
-#     ./gcloud_to_gee.sh planet-st_andrews-8b my_collection /path/to/xml_directory
+#     ./gcloud_to_gee.sh planet-st_andrews-8b planet_st_andrews ~/Downloads/stAndrew/StAndrew/PSScene/
 
 # Dependencies:
 #      https://github.com/7yl4r/filepanther
@@ -28,7 +28,7 @@ country="country_name"  # Replace with actual country
 generator="generator_name"  # Replace with actual generator
 classifier="classifier_name"  # Replace with actual classifier
 
-echo_if_test=""  # set this to "echo " to test the script, else set to ""
+echo_if_test="echo "  # set this to "echo " to test the script, else set to ""
 
 if [ "$#" -ne 3 ]; then
     echo "Wrong Arguments. Usage: "
@@ -64,8 +64,7 @@ for geotiff in $geotiffs; do
 
     echo "*** Transferring file $asset_id ***"
     echo "*** Parsing metadata..."
-    filename_no_ext=$(echo "$filename" | cut -d'_3B_' -f1)
-
+    filename_no_ext=$(echo "$filename" | sed 's/_3B_.*//')
     # Run filepanther command to parse the file and generate metadata.pickle
     $filepanther_cmd -q parse "$filename_no_ext" \
         --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}" \
@@ -75,7 +74,7 @@ for geotiff in $geotiffs; do
     # Run filepanther command to format the xml filename pattern and convert it to uppercase
     xml_fileglob=$($filepanther_cmd -q format \
         --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_3B_AnalyticMS_8b_metadata_clip.xml" \
-        --pickle_file metadata.pickle | tr '[:lower:]' '[:upper:]')
+        --pickle_file metadata.pickle)
 
     echo "xml fname is like: ${xml_fileglob}"
 
@@ -99,15 +98,15 @@ for geotiff in $geotiffs; do
 
     echo "*** Estimating json filename..."
     # Run filepanther command to format the filename pattern and convert it to uppercase                              
-    xml_fileglob=$($filepanther_cmd -q format \
+    json_fileglob=$($filepanther_cmd -q format \
         --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_metadata.json" \
-        --pickle_file metadata.pickle | tr '[:lower:]' '[:upper:]')
+        --pickle_file metadata.pickle)
 
     echo "json fname is like: ${json_fileglob}"
 
     echo "*** Searching for json file..."
     # Search for the json file  
-    json_fpath=$(find "$json_directory" -name "$json_fileglob")
+    json_fpath=$(find "$xml_directory" -name "$json_fileglob")
 
     if [ -z "$json_fpath" ]; then
         echo "json file not found!"
