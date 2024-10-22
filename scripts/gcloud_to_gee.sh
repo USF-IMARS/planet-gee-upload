@@ -51,7 +51,8 @@ else
     echo "Command result: $result"
 fi
 
-xml_reader_cmd="python3 ../util/read_wv_xml.py "
+xml_reader_cmd="python3 ../util/read_planet_xml.py "
+json_reader_cmd="python3 ../util/read_planet_json.py "
 filepanther_cmd="python3 -m filepanther "
 
 # Get the list of geotiffs in the bucket
@@ -96,6 +97,31 @@ for geotiff in $geotiffs; do
     xml_vars=$($xml_reader_cmd "$xml_fpath")
     echo "$xml_vars"
 
+    echo "*** Estimating json filename..."
+    # Run filepanther command to format the filename pattern and convert it to uppercase                              
+    xml_fileglob=$($filepanther_cmd -q format \
+        --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_metadata.json" \
+        --pickle_file metadata.pickle | tr '[:lower:]' '[:upper:]')
+
+    echo "json fname is like: ${json_fileglob}"
+
+    echo "*** Searching for json file..."
+    # Search for the json file  
+    json_fpath=$(find "$json_directory" -name "$json_fileglob")
+
+    if [ -z "$json_fpath" ]; then
+        echo "json file not found!"
+        # Log the missing json file   
+        echo "missing_json_file, $filename, find $xml_directory -name $json_fileglob" >> missing_json_files.log
+        exit 1
+    else
+        echo "Found file: $json_fpath"
+    fi
+
+    echo "*** Extracting properties from .json..."
+    json_vars=$($json_reader_cmd "$json_fpath")
+    echo "$json_vars"
+    
     echo "*** Formatting timestamp for GEE..."
     # Format the timestamp
     datetime=$($filepanther_cmd -q format \
@@ -112,6 +138,7 @@ for geotiff in $geotiffs; do
         --crs="EPSG:4326" \
         -ts="$datetime" \
         $xml_vars \
+	$json_vars \
         -p country="$country" \
         -p generator="$generator" \
         -p classifier="$classifier"
