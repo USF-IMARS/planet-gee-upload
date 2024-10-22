@@ -72,7 +72,7 @@ def read_planet_xml(filename, output_format="gee_props"):
             else:
                 child_element_text = "None"
             
-            metadata_name = f"{cleanAttr(attrib[0])}:{cleanAttr(attrib[1])}"
+            metadata_name = f"{cleanAttr(attrib[0])}_{cleanAttr(attrib[1])}"
             metadata[metadata_name] = child_element_text
         elif isinstance(attrib, dict):
             # handle dict as a layered multi-part taken from multiple tags
@@ -80,8 +80,8 @@ def read_planet_xml(filename, output_format="gee_props"):
                 iter_id = i.find(attrib['iteration_id'], namespaces).text
                 val = i.find(attrib['tag'], namespaces).text
                 metadata[
-                    f"{cleanAttr(attrib['tag'])}:"
-                    f"{cleanAttr(attrib['iteration_id'])}:"
+                    f"{cleanAttr(attrib['tag'])}_"
+                    f"{cleanAttr(attrib['iteration_id'])}_"
                     f"{iter_id}"
                 ] = val
 
