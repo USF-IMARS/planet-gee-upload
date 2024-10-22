@@ -57,6 +57,7 @@ def read_wv_xml(filename, output_format="gee_props"):
             'parent': './/ps:bandSpecificMetadata',
             'iteration_id': './/ps:bandNumber',
         },
+        './/ps:radiometricScaleFactor',
     ]
 
     def cleanAttr(a): # trims off the .//*:
