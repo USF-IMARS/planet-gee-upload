@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 from datetime import datetime
 
 
-def read_wv_xml(filename, output_format="gee_props"):
+def read_planet_xml(filename, output_format="gee_props"):
     """ read metadata values from xml file
     params
     ------
@@ -174,4 +174,4 @@ if __name__ == "__main__":
     #pp.pprint(
     #    read_wv_xml(fpath, output_format="dict")
     #)
-    print(read_wv_xml(fpath, output_format="gee_props"))
+    print(read_planet_xml(fpath, output_format="gee_props"))
