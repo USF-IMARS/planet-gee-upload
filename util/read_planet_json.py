@@ -11,7 +11,8 @@ def read_planet_json(filename, output_format="gee_props"):
 
     # Extract the 'properties' dictionary
     metadata = data.get('properties', {})
-    
+
+    del metadata['satellite_id']  # drop this b/c it is causing issues in GEE
     
     if output_format == "gee_props":
         res = ""

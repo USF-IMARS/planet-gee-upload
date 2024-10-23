@@ -13,9 +13,10 @@
 #     - xml_directory: filepath to dir with .xml & .json files
 
 # Example usages:
-#     Example 1: Run for St Andrews 
-#     ./gcloud_to_gee.sh planet-st_andrews-8b projects/imars-simm/assets/planet_st_andrews ~/Downloads/stAndrew/StAndrew/PSScene/
-
+#     Example 1: Run for St Andrews 8b 
+#       ./gcloud_to_gee.sh planet-st_andrews-8b projects/imars-simm/assets/planet_st_andrews ~/Downloads/stAndrew/StAndrew/PSScene/
+#     Example 2: Run for St Andrews masks
+#       ./gcloud_to_gee.sh planet-st_andrews-masks projects/imars-simm/assets/planet_st_andrews_masks ~/Downloads/stAndrew/StAndrew/PSScene/ | tee ../logs/StAndrew_2020_masks_gcloud_to_gee.log 
 # Dependencies:
 #      https://github.com/7yl4r/filepanther
 #      https://developers.google.com/earth-engine/guides/command_line
@@ -24,9 +25,9 @@
 
 # Ensure correct number of arguments are provided
 
-country="country_name"  # Replace with actual country
-generator="generator_name"  # Replace with actual generator
-classifier="classifier_name"  # Replace with actual classifier
+country="USA"  # Replace with actual country
+generator="IMaRS"  # Replace with actual generator
+classifier="NA"  # Replace with actual classifier
 
 echo_if_test=""  # set this to "echo " to test the script, else set to ""
 
@@ -134,7 +135,7 @@ for geotiff in $geotiffs; do
     ${echo_if_test} earthengine --project="imars-simm" upload image "$geotiff" \
         -f --asset_id="$dest_collection/$filename_no_ext" \
         --nodata_value=0 \
-        --crs="EPSG:4326" \
+        --crs="EPSG:32616" \
         -ts="$datetime" \
         $xml_vars \
 	$json_vars \

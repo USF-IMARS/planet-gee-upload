@@ -36,7 +36,6 @@ def read_planet_xml(filename, output_format="gee_props"):
         './/eop:acquisitionType',
         './/eop:processorVersion',
         './/ps:versionIsd',
-        ['.//eop:Platform', './/eop:serialIdentifier'],
         ['.//eop:Platform', './/eop:orbitType'],
         ['.//eop:Instrument', './/eop:shortName'],
         './/eop:orbitDirection',
