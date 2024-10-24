@@ -47,6 +47,13 @@ gcloud storage cp ${DATA_DIR}/PSScene/*harmonized_clip.tif gs://planet-${ROI}-8b
 gcloud storage cp ${DATA_DIR}/PSScene/*udm2_clip.tif gs://planet-${ROI}-masks | \
     tee ${LOGS_DIR}/${ROI}_masks_gcloud_upload.log
 
+gcloud storage cp ${DATA_DIR}/PSScene/*json gsL//planet-${ROI}-metadata | \
+    tee ${LOGS_DIR}/${ROI}_meta_gcloud_upload.log
+
+20240406_163234_82_24f6.json
+20240406_163234_82_24f6_metadata.json
+20240406_163237_06_24f6_3B_AnalyticMS_8b_metadata_clip.xml
+
 # === gee transfers
 cd ${SCRIPTS_DIR}
 
