@@ -1,4 +1,7 @@
 # planet-processing
+This repository contains scripts for uploading the planet superdove imagery into google earth engine for the imars-simm project.
+More information on the project [here](https://github.com/cperaltab/Seagrass_mapping).
+With thanks to FWC & the NASA CSDA program. 
 
 ## image details
 each image comes with 5 files:
