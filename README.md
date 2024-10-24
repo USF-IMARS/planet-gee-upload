@@ -24,31 +24,29 @@ Each region has two gcloud storage buckets:
 ### uploading to GCloud
 #### automation
 ```bash
-TIME_ROI=2020
 ROI=st_andrews
-DATA_DIR=~/Downloads/stAndrew/StAndrew/PSScene/
 LOGS_DIR=~/repos/planet-processing/logs
+DATA_DIR=$(pwd)/PSScene/
 
-unzip StAndrew_${TIME_ROI}_psscene_analytic_8b_sr_udm2.zip
-
-cd PSScene
+# unzip all the years
+unzip *_psscene_analytic_8b_sr_udm2.zip
 
 # === gcloud uploads
 # NOTE: must create the buckets first!
 gcloud storage cp ${DATA_DIR}*harmonized_clip.tif gs://planet-${ROI}-8b | \
-    tee ${LOGS_DIR}/StAndrew_${TIME_ROI}_8b_gcloud_upload.log
+    tee ${LOGS_DIR}/${ROI}_8b_gcloud_upload.log
 
 gcloud storage cp ${DATA_DIR}*udm2_clip.tif gs://planet-${ROI}-masks | \
-    tee ${LOGS_DIR}/StAndrew_${TIME_ROI}_masks_gcloud_upload.log
+    tee ${LOGS_DIR}/${ROI}_masks_gcloud_upload.log
 
 # === gee transfers
 cd ~/repos/planet-processing/scripts/
 
 ./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm/assets/planet_${ROI} ${DATA_DIR} | \
-    tee ${LOGS_DIR}/StAndrew_2020_8b_gcloud_to_gee.log
+    tee ${LOGS_DIR}/${ROI}_8b_gcloud_to_gee.log
 
 ./gcloud_to_gee.sh planet-${ROI}-masks projects/imars-simm/assets/planet_${ROI}_masks ${DATA_DIR} | \
-    tee ${LOGS_DIR}/StAndrew_2020_masks_gcloud_to_gee.log
+    tee ${LOGS_DIR}/${ROI}_masks_gcloud_to_gee.log
 ```
 
 #### GCloud upload example
