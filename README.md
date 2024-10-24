@@ -26,10 +26,13 @@ Each region has two gcloud storage buckets:
 ```bash
 ROI=st_andrews
 LOGS_DIR=~/repos/planet-processing/logs
-DATA_DIR=$(pwd)/PSScene/
+SCRIPTS_DIR=~/repos/planet-processing/scripts
+DATA_DIR=~/Downloads/${ROI}/
 
 # unzip all the years
+cd ${DATA_DIR}
 unzip *_psscene_analytic_8b_sr_udm2.zip
+DATA_DIR=$(pwd)/PSScene/
 
 # === gcloud uploads
 # NOTE: must create the buckets first!
@@ -40,7 +43,7 @@ gcloud storage cp ${DATA_DIR}*udm2_clip.tif gs://planet-${ROI}-masks | \
     tee ${LOGS_DIR}/${ROI}_masks_gcloud_upload.log
 
 # === gee transfers
-cd ~/repos/planet-processing/scripts/
+cd ${SCRIPTS_DIR}
 
 ./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm/assets/planet_${ROI} ${DATA_DIR} | \
     tee ${LOGS_DIR}/${ROI}_8b_gcloud_to_gee.log
