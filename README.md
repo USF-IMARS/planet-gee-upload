@@ -35,10 +35,10 @@ cd PSScene
 
 # === gcloud uploads
 # NOTE: must create the buckets first!
-gcloud storage cp *harmonized_clip.tif gs://planet-${ROI}-8b | \
+gcloud storage cp ${DATA_DIR}*harmonized_clip.tif gs://planet-${ROI}-8b | \
     tee ${LOGS_DIR}/StAndrew_${TIME_ROI}_8b_gcloud_upload.log
 
-gcloud storage cp *udm2_clip.tif gs://planet-${ROI}-masks | \
+gcloud storage cp ${DATA_DIR}*udm2_clip.tif gs://planet-${ROI}-masks | \
     tee ${LOGS_DIR}/StAndrew_${TIME_ROI}_masks_gcloud_upload.log
 
 # === gee transfers
