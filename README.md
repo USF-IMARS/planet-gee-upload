@@ -35,7 +35,7 @@ DATA_DIR=~/Downloads/${ROI}
 # unzip all the years
 cd ${DATA_DIR}
 for file in *_psscene_analytic_8b_sr_udm2.zip; do
-  unzip -n "$file" | \
+  unzip -o "$file" | \
     tee -a ${LOGS_DIR}/${ROI}_unzip.log
 done
 
