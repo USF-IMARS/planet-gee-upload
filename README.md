@@ -20,9 +20,14 @@ each image comes with 5 files:
   * metadata about sat scene
    
 ## GCloud
-Each region has two gcloud storage buckets:
+Each region has three gcloud storage buckets:
 * `planet-{region name}-8b` : 8 band spectral images
 * `planet-{region name}-masks` : masks for each corresponding spectral image
+* `planet-{region name}-metadata` : xml & json files corresponding to images
+
+The buckets are configured with the settings:
+* single region (us central (iowa))
+* storage class coldline
 
 ### uploading to GCloud
 #### automation
