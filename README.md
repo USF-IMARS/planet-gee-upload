@@ -58,11 +58,6 @@ gcloud storage cp ${DATA_DIR}/PSScene/*json gs://planet-${ROI}-metadata | \
 gcloud storage cp ${DATA_DIR}/PSScene/*xml gs://planet-${ROI}-metadata | \
     tee ${LOGS_DIR}/${ROI}_metaxml_gcloud_upload.log
 
-
-20240406_163234_82_24f6.json
-20240406_163234_82_24f6_metadata.json
-20240406_163237_06_24f6_3B_AnalyticMS_8b_metadata_clip.xml
-
 # === gee transfers
 cd ${SCRIPTS_DIR}
 
