@@ -87,62 +87,62 @@ for geotiff in $geotiffs; do
         echo "xml file not found!"
         # Log the missing XML file
         echo "missing_xml_file, $filename, find $xml_directory -name $xml_fileglob" >> missing_xml_files.log
-        exit 1
+        #exit 1
     else
         echo "Found file: $xml_fpath"
-    fi
 
-    echo "*** Extracting properties from .xml..."
-    # Extract variables from the XML file
-    xml_vars=$($xml_reader_cmd "$xml_fpath")
-    echo "$xml_vars"
+        echo "*** Extracting properties from .xml..."
+	# Extract variables from the XML file
+	xml_vars=$($xml_reader_cmd "$xml_fpath")
+	echo "$xml_vars"
 
-    echo "*** Estimating json filename..."
-    # Run filepanther command to format the filename pattern and convert it to uppercase                              
-    json_fileglob=$($filepanther_cmd -q format \
-        --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_metadata.json" \
-        --pickle_file metadata.pickle)
+	echo "*** Estimating json filename..."
+	# Run filepanther command to format the filename pattern and convert it to uppercase                              
+	json_fileglob=$($filepanther_cmd -q format \
+	    --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_metadata.json" \
+	    --pickle_file metadata.pickle)
 
-    echo "json fname is like: ${json_fileglob}"
+	echo "json fname is like: ${json_fileglob}"
 
-    echo "*** Searching for json file..."
-    # Search for the json file  
-    json_fpath=$(find "$xml_directory" -name "$json_fileglob")
+	echo "*** Searching for json file..."
+	# Search for the json file  
+	json_fpath=$(find "$xml_directory" -name "$json_fileglob")
 
-    if [ -z "$json_fpath" ]; then
-        echo "json file not found!"
-        # Log the missing json file   
-        echo "missing_json_file, $filename, find $xml_directory -name $json_fileglob" >> missing_json_files.log
-        exit 1
-    else
-        echo "Found file: $json_fpath"
-    fi
+	if [ -z "$json_fpath" ]; then
+            echo "json file not found!"
+            # Log the missing json file   
+            echo "missing_json_file, $filename, find $xml_directory -name $json_fileglob" >> missing_json_files.log
+            #exit 1
+	else
+            echo "Found file: $json_fpath"
 
-    echo "*** Extracting properties from .json..."
-    json_vars=$($json_reader_cmd "$json_fpath")
-    echo "$json_vars"
+	    echo "*** Extracting properties from .json..."
+	    json_vars=$($json_reader_cmd "$json_fpath")
+	    echo "$json_vars"
     
-    echo "*** Formatting timestamp for GEE..."
-    # Format the timestamp
-    datetime=$($filepanther_cmd -q format \
-        --pattern "%Y-%m-%dT%H:%M:%S" \
-        --pickle_file metadata.pickle)
+	    echo "*** Formatting timestamp for GEE..."
+	    # Format the timestamp
+	    datetime=$($filepanther_cmd -q format \
+		--pattern "%Y-%m-%dT%H:%M:%S" \
+		--pickle_file metadata.pickle)
 
-    echo "$datetime"
+	    echo "$datetime"
 
-    echo "*** Transferring image and metadata..."
-    # Upload to Google Earth Engine
-    ${echo_if_test} earthengine --project="imars-simm" upload image "$geotiff" \
-        -f --asset_id="$dest_collection/$filename_no_ext" \
-        --nodata_value=0 \
-        --crs="EPSG:32616" \
-        -ts="$datetime" \
-        $xml_vars \
-	$json_vars \
-        -p country="$country" \
-        -p generator="$generator" \
-        -p classifier="$classifier"
-    # TODO: add json vars?
-    echo "done!"
-    echo ""
+	    echo "*** Transferring image and metadata..."
+	    # Upload to Google Earth Engine
+	    ${echo_if_test} earthengine --project="imars-simm" upload image "$geotiff" \
+			    -f --asset_id="$dest_collection/$filename_no_ext" \
+			    --nodata_value=0 \
+			    --crs="EPSG:32616" \
+			    -ts="$datetime" \
+			    $xml_vars \
+			    $json_vars \
+			    -p country="$country" \
+			    -p generator="$generator" \
+			    -p classifier="$classifier"
+	    # TODO: add json vars?
+	    echo "done!"
+	    echo ""
+	fi
+    fi
 done
