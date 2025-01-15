@@ -1,0 +1,103 @@
+/* this is an example of metadata about the bands */
+{
+"raster:bands": [
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 1.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 1.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 0.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 0.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 0.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 1.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 100.0
+    }
+  },
+  {
+    "data_type": "uint8",
+    "spatial_resolution": 3.0,
+    "statistics": {
+      "minimum": 0.0,
+      "maximum": 4.0
+    }
+  }
+],
+"eo:bands": [
+  {
+    "name": "B1",
+    "description": "Clear map (0: not clear, 1: clear)"
+  },
+  {
+    "name": "B2",
+    "description": "Snow map (0: no snow or ice, 1: snow or ice)"
+  },
+  {
+    "name": "B3",
+    "description": "Shadow map (0: no shadow, 1: shadow)"
+  },
+  {
+    "name": "B4",
+    "description": "Light haze map (0: no light haze, 1: light haze)"
+  },
+  {
+    "name": "B5",
+    "description": "Heavy haze map (0: no heavy haze, 1: heavy haze)"
+  },
+  {
+    "name": "B6",
+    "description": "Cloud map (0: no cloud, 1: cloud)"
+  },
+  {
+    "name": "B7",
+    "description": "Confidence map (percentage value: per-pixel algorithmic confidence in classification)"
+  },
+  {
+    "name": "B8",
+    "description": "Unusable pixels"
+  }
+]
+}
