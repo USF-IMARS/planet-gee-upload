@@ -133,7 +133,6 @@ for geotiff in $geotiffs; do
 	    ${echo_if_test} earthengine --project="imars-simm" upload image "$geotiff" \
 			    -f --asset_id="$dest_collection/$filename_no_ext" \
 			    --nodata_value=0 \
-			    --crs="EPSG:32616" \
 			    -ts="$datetime" \
 			    $xml_vars \
 			    $json_vars \
