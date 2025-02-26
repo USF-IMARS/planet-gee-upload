@@ -3,7 +3,13 @@ This repository contains scripts for uploading the planet superdove imagery into
 More information on the project [here](https://github.com/cperaltab/Seagrass_mapping).
 With thanks to FWC & the NASA CSDA program. 
 
+## Image Storage
+Images are stored in box.com folder `Seagrass/PlanetImages` then uploaded to different Google Cloud buckets for each region and image type.
+
 ## image details
+Images come in two flavors: harmonized and unharmonized.
+
+### Harmonized
 each image comes with 5 files:
 * `*_3B_AnalyticMS_8b_metadata_clip.xml`
   * ps:Footprint
@@ -18,7 +24,14 @@ each image comes with 5 files:
   * metadata about sat images, band info, 
 * `*_metadata.json`
   * metadata about sat scene
-   
+
+### Unharmonized
+Unharmonized 8b files resemble the harmonized structure but without the `_harmonized_` part of each filename.
+Mask files are identical.
+
+### unclipped
+8B and mask files that have not been clipped match the harmonized structure but without the `_clip_` part of each filename.
+ 
 ## GCloud
 Each region has three gcloud storage buckets:
 * `planet-{region name}-8b` : 8 band spectral images
@@ -46,15 +59,36 @@ done
 
 # === gcloud uploads
 # NOTE: must create the buckets first!
+
+# harmonized, clipped 8b
 gcloud storage cp ${DATA_DIR}/PSScene/*harmonized_clip.tif gs://planet-${ROI}-8b | \
     tee ${LOGS_DIR}/${ROI}_8b_gcloud_upload.log
 
-gcloud storage cp ${DATA_DIR}/PSScene/*udm2_clip.tif gs://planet-${ROI}-masks | \
+# harmonized unclipped 8b
+gcloud storage cp ${DATA_DIR}/PSScene/*harmonized.tif gs://planet-${ROI}-8b | \
+    tee ${LOGS_DIR}/${ROI}_8b_unclip_gcloud_upload.log
+
+# unharmonized clipped 8b
+gcloud storage cp ${DATA_DIR}/PSScene/*SR_8b_clip.tif gs://planet-${ROI}-8b-unharmonized | \
+    tee ${LOGS_DIR}/${ROI}_8b_unharm_gcloud_upload.log
+
+# unharmonized unclipped 8b
+gcloud storage cp ${DATA_DIR}/PSScene/*SR_8b.tif gs://planet-${ROI}-8b-unharmonized | \
+    tee ${LOGS_DIR}/${ROI}_8b_unharm_unclip_gcloud_upload.log
+
+# clipped masks
+gcloud storage cp ${DATA_DIR}/PSScene/*_3B_udm2_clip.tif gs://planet-${ROI}-masks | \
     tee ${LOGS_DIR}/${ROI}_masks_gcloud_upload.log
 
+# unclipped masks
+gcloud storage cp ${DATA_DIR}/PSScene/*_3B_udm2.tif gs://planet-${ROI}-masks | \
+    tee ${LOGS_DIR}/${ROI}_masks_unclip_gcloud_upload.log
+
+# json files
 gcloud storage cp ${DATA_DIR}/PSScene/*json gs://planet-${ROI}-metadata | \
     tee ${LOGS_DIR}/${ROI}_metajson_gcloud_upload.log
 
+# xml files
 gcloud storage cp ${DATA_DIR}/PSScene/*xml gs://planet-${ROI}-metadata | \
     tee ${LOGS_DIR}/${ROI}_metaxml_gcloud_upload.log
 
