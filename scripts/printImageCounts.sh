@@ -28,3 +28,8 @@ accounted=$((harm_clip + clip_mask + unharm_clip + harm_noclip + noclip_mask + u
 unaccounted=$((total - accounted))
 
 echo "Unaccounted tif Files   : $unaccounted"
+
+json=$(ls -1 *json 2>/dev/null | wc -l)
+xml=$( ls -1 *xml  2>/dev/null | wc -l)
+echo "          # .json files : $json"
+echo "          # .xml  files : $xml"
