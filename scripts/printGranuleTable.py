@@ -34,6 +34,8 @@ def main():
         'udm2_clip':    re.compile(r'^(?P<granule>.+)_3B_udm2_clip\.tif$'),
         'meta.json':    re.compile(r'^(?P<granule>.+)_metadata\.json$'),
         'xml':          re.compile(r'^(?P<granule>.+)_3B_AnalyticMS_8b_metadata\.xml$'),
+        'xml_clip':     re.compile(r'^(?P<granule>.+)_3B_AnalyticMS_8b_metadata_clip\.xml$'),
+        'json':         re.compile(r'^(?P<granule>.+)\.json'),
     }
     
     # Dictionary to store granule info.
@@ -73,7 +75,7 @@ def main():
     # Build rows for our table.
     rows = []
     # Define the column order.
-    columns = ["granule", "8b", "8b_clip", "8b_harm", "8b_clip_harm", "udm2", "udm2_clip", "meta.json", "xml", "others"]
+    columns = ["granule", "8b", "8b_clip", "8b_harm", "8b_clip_harm", "udm2", "udm2_clip", "meta.json", "xml", "xml_clip", "json", "others"]
     
     for granule in sorted(granule_data.keys()):
         entry = granule_data[granule]
@@ -89,6 +91,8 @@ def main():
             "udm2_clip": entry['udm2_clip'],
             "meta.json": entry['meta.json'],
             "xml": entry['xml'],
+            "xml_clip": entry['xml_clip'],
+            "json": entry['json'],
             "others": others_str
         }
         rows.append(row)
