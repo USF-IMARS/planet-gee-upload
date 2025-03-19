@@ -16,12 +16,18 @@ import sys
 import re
 import pandas as pd
 
+from upload_row import upload_row
+
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python printGranuleTable.py my_data_dir")
+    if len(sys.argv) != 3:
+        print("Usage: python printGranuleTable.py my_roi my_data_dir")
         sys.exit(1)
-    
-    data_dir = sys.argv[1]
+
+    roi = sys.argv[1]
+    data_dir = sys.argv[2]
+    if not data_dir or not roi:
+        print("Error: any([DATA_DIR, ROI]) environment variables are not set.")
+        return 0
 
     # Define expected file types and the corresponding regex patterns.
     # Each pattern captures the granule ID as the part before the fixed suffix.
@@ -75,7 +81,7 @@ def main():
     # Build rows for our table.
     rows = []
     # Define the column order.
-    columns = ["granule", "8b", "8b_clip", "8b_harm", "8b_clip_harm", "udm2", "udm2_clip", "meta.json", "xml", "xml_clip", "json", "others"]
+    columns = ["granule", "8b", "8b_clip", "8b_harm", "8b_clip_harm", "udm2", "udm2_clip", "meta.json", "xml", "xml_clip", "json", "others", "uploaded"]
     
     for granule in sorted(granule_data.keys()):
         entry = granule_data[granule]
@@ -93,8 +99,11 @@ def main():
             "xml": entry['xml'],
             "xml_clip": entry['xml_clip'],
             "json": entry['json'],
-            "others": others_str
+            "others": others_str,
+            "uploaded": 0
         }
+        row["uploaded"] = upload_row(row, expected_patterns, roi, data_dir) #, test=True)
+        
         rows.append(row)
     
     df = pd.DataFrame(rows, columns=columns)
