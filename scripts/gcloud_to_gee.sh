@@ -90,7 +90,7 @@ for geotiff in $geotiffs; do
         --pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_3B_AnalyticMS_8b_metadata_clip.xml" \
         --pickle_file metadata.pickle)
 
-    echo "xml fname is like: ${xml_fileglob}"
+    # echo "xml fname is like: ${xml_fileglob}"
 
     echo "*** Searching for xml file in GCloud bucket..."
     # Create a temp directory to store the downloaded XML file
@@ -103,8 +103,20 @@ for geotiff in $geotiffs; do
         gsutil cp gs://$xml_bucket/$xml_fileglob $temp_dir/
         xml_fpath="$temp_dir/$(basename $xml_fileglob)"
     else
-        echo "XML file not found in GCloud bucket."
-        xml_fpath=""
+		# try other filepath
+		xml_fileglob=$($filepanther_cmd -q format \
+			--pattern "%Y%m%d_%H%M%S_{satellite}_{pass_id}_3B_AnalyticMS_8b_metadata.xml" \
+			--pickle_file metadata.pickle)
+		# Check if the XML file exists in the bucket
+		gsutil -q ls gs://$xml_bucket/$xml_fileglob > /dev/null
+	    if [ $? -eq 0 ]; then
+			echo "Found XML file in GCloud bucket. Downloading..."
+			gsutil cp gs://$xml_bucket/$xml_fileglob $temp_dir/
+			xml_fpath="$temp_dir/$(basename $xml_fileglob)"
+		else
+			echo "XML file not found in GCloud bucket."
+			xml_fpath=""
+	    fi
     fi
 
     if [ -z "$xml_fpath" ]; then
