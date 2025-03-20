@@ -85,16 +85,17 @@ def upload_row(row, glob_map, roi, data_dir, test=False):
         
     else:
         print('{row["granule_id"]} missing too many files.')
+        return 0
         
     for command in commands:
         # Run the command
         print(command)
         try:
             result = subprocess.run(command, shell=True)
-            if result.returncode == 0:
-                return 1
-            else:
+            if result.returncode != 0:
+                print('error occurred while uploading')
                 return 0
         except Exception as e:
             print(f"Exception occurred while running command: {e}")
             return 0
+    return 1
