@@ -31,6 +31,11 @@ classifier="NA"  # Replace with actual classifier
 
 echo_if_test=""  # set this to "echo " to test the script, else set to ""
 
+# Initialize arrays to track successful and failed files
+successful_files=()
+failed_files=()
+failure_reasons=()
+
 if [ "$#" -ne 3 ]; then
     echo "Wrong Arguments. Usage: "
     echo "./gcloud_to_gee.sh <bucket> <dest_collection> <xml_bucket>"
@@ -60,12 +65,18 @@ filepanther_cmd="python3 -m filepanther "
 
 # Get the list of geotiffs in the bucket
 geotiffs=$(gsutil ls gs://$bucket/*.tif)
+total_files=$(echo "$geotiffs" | wc -l)
+echo "Found $total_files .tif files to process."
 
+file_counter=0
 for geotiff in $geotiffs; do
+    file_counter=$((file_counter + 1))
     filename=$(basename "$geotiff")
     asset_id="${filename%.*}"
+    file_status="success"
+    failure_reason=""
 
-    echo "*** Transferring file $asset_id ***"
+    echo "*** [$file_counter/$total_files] Processing file $asset_id ***"
     echo "*** Parsing metadata..."
     filename_no_ext=$(echo "$filename" | sed 's/_3B_.*//')
     # Run filepanther command to parse the file and generate metadata.pickle
@@ -100,7 +111,8 @@ for geotiff in $geotiffs; do
         echo "xml file not found!"
         # Log the missing XML file
         echo "missing_xml_file, $filename, gsutil ls gs://$xml_bucket/$xml_fileglob" >> missing_xml_files.log
-        #exit 1
+        file_status="failed"
+        failure_reason="XML file not found"
     else
         echo "Found file: $xml_fpath"
 
@@ -133,7 +145,8 @@ for geotiff in $geotiffs; do
             echo "json file not found!"
             # Log the missing json file   
             echo "missing_json_file, $filename, gsutil ls gs://$xml_bucket/$json_fileglob" >> missing_json_files.log
-            #exit 1
+            file_status="failed"
+            failure_reason="JSON file not found"
 	else
             echo "Found file: $json_fpath"
 
@@ -160,10 +173,25 @@ for geotiff in $geotiffs; do
 			    -p country="$country" \
 			    -p generator="$generator" \
 			    -p classifier="$classifier"
-	    # TODO: add json vars?
-	    echo "done!"
-	    echo ""
+	    
+            # Check if the upload was successful based on exit code
+            if [ $? -ne 0 ]; then
+                echo "Error during Earth Engine upload!"
+                file_status="failed"
+                failure_reason="Upload to Earth Engine failed"
+            else
+                echo "done!"
+                echo ""
+            fi
 	fi
+    fi
+    
+    # Track success or failure
+    if [ "$file_status" = "success" ]; then
+        successful_files+=("$filename")
+    else
+        failed_files+=("$filename")
+        failure_reasons+=("$filename: $failure_reason")
     fi
     
     # Clean up temporary directory
@@ -171,3 +199,42 @@ for geotiff in $geotiffs; do
         rm -rf "$temp_dir"
     fi
 done
+
+# Print summary report
+echo ""
+echo "====================== SUMMARY REPORT ======================"
+echo "Total files processed: $total_files"
+echo "Successful transfers: ${#successful_files[@]}"
+echo "Failed transfers: ${#failed_files[@]}"
+
+if [ ${#failed_files[@]} -gt 0 ]; then
+    echo ""
+    echo "List of failed files and reasons:"
+    for reason in "${failure_reasons[@]}"; do
+        echo "  - $reason"
+    done
+fi
+
+echo "============================================================"
+echo ""
+
+# Log the summary to a file as well
+summary_log="gee_upload_summary_$(date +%Y%m%d_%H%M%S).log"
+{
+    echo "====================== SUMMARY REPORT ======================"
+    echo "Total files processed: $total_files"
+    echo "Successful transfers: ${#successful_files[@]}"
+    echo "Failed transfers: ${#failed_files[@]}"
+    
+    if [ ${#failed_files[@]} -gt 0 ]; then
+        echo ""
+        echo "List of failed files and reasons:"
+        for reason in "${failure_reasons[@]}"; do
+            echo "  - $reason"
+        done
+    fi
+    
+    echo "============================================================"
+} > "$summary_log"
+
+echo "Summary report saved to $summary_log"
