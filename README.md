@@ -60,47 +60,22 @@ done
 # === gcloud uploads
 # NOTE: must create the buckets first!
 
-# harmonized, clipped 8b
-gcloud storage cp ${DATA_DIR}/PSScene/*harmonized_clip.tif gs://planet-${ROI}-8b | \
-    tee ${LOGS_DIR}/${ROI}_8b_gcloud_upload.log
-
-# harmonized unclipped 8b
-gcloud storage cp ${DATA_DIR}/PSScene/*harmonized.tif gs://planet-${ROI}-8b | \
-    tee ${LOGS_DIR}/${ROI}_8b_unclip_gcloud_upload.log
-
-# unharmonized clipped 8b
-gcloud storage cp ${DATA_DIR}/PSScene/*SR_8b_clip.tif gs://planet-${ROI}-8b-unharmonized | \
-    tee ${LOGS_DIR}/${ROI}_8b_unharm_gcloud_upload.log
-
-# unharmonized unclipped 8b
-gcloud storage cp ${DATA_DIR}/PSScene/*SR_8b.tif gs://planet-${ROI}-8b-unharmonized | \
-    tee ${LOGS_DIR}/${ROI}_8b_unharm_unclip_gcloud_upload.log
-
-# clipped masks
-gcloud storage cp ${DATA_DIR}/PSScene/*_3B_udm2_clip.tif gs://planet-${ROI}-masks | \
-    tee ${LOGS_DIR}/${ROI}_masks_gcloud_upload.log
-
-# unclipped masks
-gcloud storage cp ${DATA_DIR}/PSScene/*_3B_udm2.tif gs://planet-${ROI}-masks | \
-    tee ${LOGS_DIR}/${ROI}_masks_unclip_gcloud_upload.log
-
-# json files
-gcloud storage cp ${DATA_DIR}/PSScene/*json gs://planet-${ROI}-metadata | \
-    tee ${LOGS_DIR}/${ROI}_metajson_gcloud_upload.log
-
-# xml files
-gcloud storage cp ${DATA_DIR}/PSScene/*xml gs://planet-${ROI}-metadata | \
-    tee ${LOGS_DIR}/${ROI}_metaxml_gcloud_upload.log
+# NOTE: this only works for latest CSDA unharmonized images, updates will be needed to support
+#       older planet granule packaging structures
+python scripts/uploadGranules.py tti ~/Downloads/Rookery_2024_Oct_Dec_CSDA_unharmonized/
 
 # === gee transfers
 cd ${SCRIPTS_DIR}
 
+# harmonized
 ./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm/assets/planet_${ROI} ${DATA_DIR}/PSScene | \
     tee ${LOGS_DIR}/${ROI}_8b_gcloud_to_gee.log
 
+# unharmonized
 ./gcloud_to_gee.sh planet-${ROI}-8b-unharmonized projects/imars-simm/assets/planet_unharmonized_${ROI} ${DATA_DIR}/PSScene | \
     tee ${LOGS_DIR}/${ROI}_8b_gcloud_to_gee.log
 
+# masks
 ./gcloud_to_gee.sh planet-${ROI}-masks projects/imars-simm/assets/planet_${ROI}_masks ${DATA_DIR}/PSScene | \
     tee ${LOGS_DIR}/${ROI}_masks_gcloud_to_gee.log
 ```
