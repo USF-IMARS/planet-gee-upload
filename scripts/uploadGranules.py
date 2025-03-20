@@ -5,6 +5,10 @@ Prints out a table of which files are available per granule.
 Usage:
   python printGranuleTable.py my_data_dir
 
+Example:
+ python scripts/uploadGranules.py tti ~/Downloads/Rookery_2024_Oct_Dec_CSDA_unharmonized/
+
+
 Example output:
 granule,8b,8b_clip,8b_harm,8b_clip_harm,udm2,udm2_clip,meta.json,xml,others
 20241031_161446_28_24d7,1,0,0,0,1,0,1,1,
