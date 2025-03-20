@@ -2,17 +2,16 @@ import os
 import re
 import subprocess
 
-def py_rx_2_find_rx(regex):
+def py_rx_2_find_rx(pattern, granule_id):
     # convert python regex object to regex string for unix `find`
     # Original Python regex
-    pattern = re.compile(r'^(?P<granule>.+)_3B_AnalyticMS_SR_8b\.tif$')
 
     # Get the raw pattern string
     raw_pattern = pattern.pattern  # "^(?P<granule>.+)_3B_AnalyticMS_SR_8b\.tif$"
 
     # Replace the named group syntax with a standard group
-    regex_no_named = raw_pattern.replace("(?P<granule>", "(")
-    # Now regex_no_named is "^(.+)_3B_AnalyticMS_SR_8b\.tif$"
+    regex_no_named = raw_pattern.replace("(?P<granule>.+)", granule_id)
+    # Now regex_no_named is "^{granule_id}_3B_AnalyticMS_SR_8b\.tif$"
 
     # Since find's regex matches the entire path, remove the caret and prepend '.*\/'
     find_regex = ".*\/" + regex_no_named.lstrip("^")
@@ -61,25 +60,25 @@ def upload_row(row, glob_map, roi, data_dir, test=False):
         commands.append(
             f"{ECHO} gcloud storage cp $(find {data_dir} -regextype posix-extended "
             f"-type f "
-            f"-regex '{py_rx_2_find_rx(glob_map['8b'])}') "
+            f"-regex '{py_rx_2_find_rx(glob_map['8b'], row['granule'])}') "
             f"gs://planet-{roi}-8b-unharmonized "
         )
         commands.append(
             f"{ECHO} gcloud storage cp $(find {data_dir}  -regextype posix-extended "
             f"-type f "
-            f"-regex '{py_rx_2_find_rx(glob_map['udm2'])}') "
+            f"-regex '{py_rx_2_find_rx(glob_map['udm2'], row['granule'])}') "
             f"gs://planet-{roi}-masks "
         )
         commands.append(
             f"{ECHO} gcloud storage cp $(find {data_dir} -regextype posix-extended "
             f"-type f "
-            f"-regex '{py_rx_2_find_rx(glob_map['meta.json'])}') "
+            f"-regex '{py_rx_2_find_rx(glob_map['meta.json'], row['granule'])}') "
             f"gs://planet-{roi}-metadata "
         )
         commands.append(
             f"{ECHO} gcloud storage cp $(find {data_dir} -regextype posix-extended "
             f"-type f "
-            f"-regex '{py_rx_2_find_rx(glob_map['xml'])}') "
+            f"-regex '{py_rx_2_find_rx(glob_map['xml'], row['granule'])}') "
             f"gs://planet-{roi}-metadata "
         )
 
