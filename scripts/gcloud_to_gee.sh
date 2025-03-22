@@ -5,16 +5,16 @@
 #     GEarthEngine including relevant metadata.
 
 # Usage:
-#     ./gcloud_to_gee.sh bucket_prefix dest_collection xml_bucket
+#     ./gcloud_to_gee.sh product_bucket  dest_collection xml_bucket
 
 # Arguments:
-#     - bucket_prefix: name of GCloud bucket with .tif files
+#     - product_bucket: name of GCloud bucket with .tif files
 #     - dest_collection: ImageCollection being created
 #     - xml_bucket: name of GCloud bucket containing XML and JSON metadata files
 
 # Example usages:
 #     Example 1: Run for St Andrews 8b 
-#       ./gcloud_to_gee.sh planet-st_andrews-8b projects/imars-simm/assets/planet_st_andrews planet-xml-metadata-bucket
+#       ./gcloud_to_gee.sh planet-st_andrews-8b projects/imars-simm/assets/planet_st_andrews planet-st_andrews-metadata
 #     Example 2: Run for St Andrews masks
 #       ./gcloud_to_gee.sh planet-st_andrews-masks projects/imars-simm/assets/planet_st_andrews_masks planet-xml-metadata-bucket | tee ../logs/StAndrew_2020_masks_gcloud_to_gee.log 
 # Dependencies:
