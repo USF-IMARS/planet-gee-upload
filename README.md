@@ -62,7 +62,7 @@ done
 
 # NOTE: this only works for latest CSDA unharmonized images, updates will be needed to support
 #       older planet granule packaging structures
-python scripts/uploadGranules.py tti ~/Downloads/Rookery_2024_Oct_Dec_CSDA_unharmonized/
+python ${SCRIPTS_DIR}/uploadGranules.py ${ROI} ${DATA_DIR}
 
 # === gee transfers
 cd ${SCRIPTS_DIR}
