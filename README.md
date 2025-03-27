@@ -68,16 +68,14 @@ python ${SCRIPTS_DIR}/uploadGranules.py ${ROI} ${DATA_DIR}
 cd ${SCRIPTS_DIR}
 
 # harmonized
-./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm/assets/planet_${ROI} ${DATA_DIR}/PSScene | \
-    tee ${LOGS_DIR}/${ROI}_8b_gcloud_to_gee.log
+./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm/assets/planet_${ROI} planet-${ROI}-metadata
 
 # unharmonized
-./gcloud_to_gee.sh planet-${ROI}-8b-unharmonized projects/imars-simm/assets/planet_unharmonized_${ROI} ${DATA_DIR}/PSScene | \
-    tee ${LOGS_DIR}/${ROI}_8b_gcloud_to_gee.log
+./gcloud_to_gee.sh planet-${ROI}-8b-unharmonized projects/imars-simm/assets/planet_${ROI}_unharmonized planet-${ROI}-metadata
 
 # masks
-./gcloud_to_gee.sh planet-${ROI}-masks projects/imars-simm/assets/planet_${ROI}_masks ${DATA_DIR}/PSScene | \
-    tee ${LOGS_DIR}/${ROI}_masks_gcloud_to_gee.log
+./gcloud_to_gee.sh planet-${ROI}-masks projects/imars-simm/assets/planet_${ROI}_masks planet-${ROI}-metadata
+
 ```
 
 #### GCloud upload example
