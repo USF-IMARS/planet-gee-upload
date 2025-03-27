@@ -60,8 +60,11 @@ done
 # === gcloud uploads
 # NOTE: must create the buckets first!
 
-# NOTE: this only works for latest CSDA unharmonized images, updates will be needed to support
-#       older planet granule packaging structures
+# NOTE: This only works for
+#         * latest CSDA unharmonized images
+#         * planet harmonized+clipped downloads
+#       If you see a lot of "missing too many files", this means
+#       updates will be needed to support those image packagings.
 python ${SCRIPTS_DIR}/uploadGranules.py ${ROI} ${DATA_DIR}
 
 # === gee transfers
