@@ -71,16 +71,20 @@ def main():
                     matched = True
                     break
             if not matched:
+                print(f"unknown filetype detected:\n\t{file}")
                 # For files that don't match any expected pattern, try to extract a granule id heuristically.
                 # Here we assume the granule id is given by the first four underscore-separated parts.
                 parts = file.split('_')
                 if len(parts) >= 4:
                     granule = '_'.join(parts[:4])
                     if granule not in granule_data:
+                        print("heuristic granule extracted")
                         granule_data[granule] = {ft: 0 for ft in expected_patterns.keys()}
                         granule_data[granule]['others'] = []
                     granule_data[granule]['others'].append(file)
                 # Files that do not even have 4 parts are ignored.
+                else:
+                    print("file ignored")
 
     # Build rows for our table.
     rows = []
@@ -106,7 +110,7 @@ def main():
             "others": others_str,
             "uploaded": 0
         }
-        row["uploaded"] = upload_row(row, expected_patterns, roi, data_dir) #, test=True)
+        row["uploaded"] = upload_row(row, expected_patterns, roi, data_dir)#, test=True)
         
         rows.append(row)
     

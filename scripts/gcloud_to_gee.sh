@@ -16,7 +16,7 @@
 #     Example 1: Run for St Andrews 8b 
 #       ./gcloud_to_gee.sh planet-st_andrews-8b projects/imars-simm/assets/planet_st_andrews planet-st_andrews-metadata
 #     Example 2: Run for St Andrews masks
-#       ./gcloud_to_gee.sh planet-st_andrews-masks projects/imars-simm/assets/planet_st_andrews_masks planet-xml-metadata-bucket | tee ../logs/StAndrew_2020_masks_gcloud_to_gee.log 
+#       ./gcloud_to_gee.sh planet-st_andrews-masks projects/imars-simm/assets/planet_st_andrews_masks planet-st_andrews-masks | tee ../logs/StAndrew_2020_masks_gcloud_to_gee.log 
 # Dependencies:
 #      https://github.com/7yl4r/filepanther
 #      https://developers.google.com/earth-engine/guides/command_line
