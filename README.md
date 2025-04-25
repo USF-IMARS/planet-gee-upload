@@ -71,13 +71,13 @@ python ${SCRIPTS_DIR}/uploadGranules.py ${ROI} ${DATA_DIR}
 cd ${SCRIPTS_DIR}
 
 # harmonized
-./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm/assets/planet_${ROI} planet-${ROI}-metadata
+./gcloud_to_gee.sh planet-${ROI}-8b projects/imars-simm-${ROI}/assets/planet_${ROI} planet-${ROI}-metadata
 
 # unharmonized
-./gcloud_to_gee.sh planet-${ROI}-8b-unharmonized projects/imars-simm/assets/planet_${ROI}_unharmonized planet-${ROI}-metadata
+./gcloud_to_gee.sh planet-${ROI}-8b-unharmonized projects/imars-simm-${ROI}/assets/planet_${ROI}_unharmonized planet-${ROI}-metadata
 
 # masks
-./gcloud_to_gee.sh planet-${ROI}-masks projects/imars-simm/assets/planet_${ROI}_masks planet-${ROI}-metadata
+./gcloud_to_gee.sh planet-${ROI}-masks projects/imars-simm-${ROI}/assets/planet_${ROI}_masks planet-${ROI}-metadata
 
 ```
 
