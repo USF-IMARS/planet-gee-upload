@@ -44,6 +44,10 @@ The buckets are configured with the settings:
 
 ### uploading to GCloud
 #### automation
+NOTE: Images are now organized under regional gcloud projects `imars-simm-$ROI`.
+      The project may need to be set in the earthengine and gcloud CLIs.
+      We are still figuring out the details.
+
 ```bash
 ROI=st_andrews
 LOGS_DIR=~/repos/planet-processing/logs
