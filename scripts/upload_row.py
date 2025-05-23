@@ -60,6 +60,12 @@ def upload_row(row, glob_map, roi, data_dir, test=False):
          f"-regex '{py_rx_2_find_rx(glob_map['8b'], row['granule'])}') "
          f"gs://planet-{roi}-8b-unharmonized "
     )
+    cmd_8b_harm = (
+         f"{ECHO} gcloud storage cp $(find {data_dir} -regextype posix-extended "
+         f"-type f "
+         f"-regex '{py_rx_2_find_rx(glob_map['8b_harm'], row['granule'])}') "
+         f"gs://planet-{roi}-8b "
+    )
     cmd_mask = (
          f"{ECHO} gcloud storage cp $(find {data_dir}  -regextype posix-extended "
          f"-type f "
@@ -111,6 +117,14 @@ def upload_row(row, glob_map, roi, data_dir, test=False):
         commands.append(cmd_mask)
         commands.append(cmd_meta_json)
         commands.append(cmd_xml)
+    elif all(row[key] == 1 for key in['8b_harm', 'udm2', 'json', 'meta.json', 'xml']):
+        # harmonized like from planet download 2025-04
+        print('# CSDA harmonized unclipped')
+        commands.append(cmd_8b_harm)
+        commands.append(cmd_mask)
+        commands.append(cmd_json)
+        commands.append(cmd_meta_json)
+        commands.append(cmd_xml)
     elif all(row[key] == 1 for key in['8b_clip_harm', 'udm2_clip', 'json', 'meta.json', 'xml_clip']):
         # unharmonized & clipped like from planet download 2025
         print("# planet harmonized+clipped")
@@ -118,10 +132,9 @@ def upload_row(row, glob_map, roi, data_dir, test=False):
         commands.append(cmd_mask_clip)
         commands.append(cmd_xml_clip)
         commands.append(cmd_json)
-        commands.append(cmd_meta_json)
-        
+        commands.append(cmd_meta_json)        
     else:
-        print(f'{row["granule"]} missing too many files.')
+        print(f'{row["granule"]} missing too many files or unknown granule packaging.')
         return 0
         
     for command in commands:

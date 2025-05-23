@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 """
 Prints out a table of which files are available per granule.
+Uploads files to gcloud buckets as structured for SIMM projects.
+**Buckets must be created before running.**
+**Ensure your gcloud project is correct before running.**
+```
+# check which project you are using
+gcloud config get-value project
+
+# set the project
+gcloud config set project NEW_PROJECT_ID
+```
 
 Usage:
   python printGranuleTable.py my_data_dir
